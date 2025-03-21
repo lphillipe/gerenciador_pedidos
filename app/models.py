@@ -1,22 +1,11 @@
-from sqlalchemy.orm import Session
-from app.database import Pedido, SessionLocal
+from sqlalchemy import Column, Integer, String, Float
+from .database import Base
 
-# Função para obter a sessão do banco de dados
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+class Pedido(Base):
+    __tablename__= "pedidos"
 
-# Criar um pedido no banco de dados
-def criar_pedido(db: Session, item: str, quantidade: int):
-    pedido = Pedido(item=item, quantidade=quantidade)
-    db.add(pedido)
-    db.commit()
-    db.refresh(pedido)
-    return pedido
-
-# Listar todos os pedidos
-def listar_pedidos(db: Session):
-    return db.query(Pedido).all()
+    id = Column(Integer, primary_key=True, index=True)
+    descricao = Column(String, nullable=False)
+    preco = Column(Float, nullable=False)
+    status = Column(String, default="pendente")
+    

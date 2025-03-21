@@ -1,10 +1,12 @@
 from fastapi import FastAPI
-from app.routes import pedidos # Importa a rota de pedido
+from .database import Base, engine
+from .routes import router # Importa a rota de pedido
 
-app = FastAPI()
+Base.metadata.create_all(bind=engine)
+app = FastAPI(title="Gerenciador de Pedidos API")
 
-app.include_router(pedidos.router) # Adiciona a rota
+app.include_router(router) # Adiciona a rota
 
-@app.get("/")
-def read_root():
+@app.get("/", tags=["Status"])
+def root():
     return {"Mensagem": "API Gerenciamento de Pedidos"}
